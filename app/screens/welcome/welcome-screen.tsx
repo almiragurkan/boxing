@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { View, ViewStyle, TextStyle, Text, TouchableOpacity } from "react-native"
+import { View, ViewStyle, TextStyle, Text, TouchableOpacity, ImageBackground } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -10,7 +10,7 @@ import {
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 
-
+const image = require("../screens/welcome/logo2.png")
 
 
 const FULL: ViewStyle = { flex: 1 }
@@ -18,6 +18,10 @@ const CONTAINER: ViewStyle = {
   flex:1,
   backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
+}
+const IMAGE: ViewStyle = {
+  flex:1,
+  justifyContent: "center",
 }
 const TEXT: TextStyle = {
   color: color.palette.white,
@@ -49,7 +53,7 @@ const WORK_REST: ViewStyle = {
   flexDirection: "row",
   justifyContent:"space-around",
   padding: spacing[4],
-  flex:0.1
+  flex:0.35
 }
 const TEXT_WORK_REST: TextStyle = {
   ...TEXT,
@@ -60,7 +64,7 @@ const TEXT_WORK_REST: TextStyle = {
 const TIME: ViewStyle = {
   alignItems:"center",
   paddingVertical:spacing[8],
-  flex:0.4
+  flex:0.25,
 }
 const TEXT_TIME: TextStyle = {
   ...TEXT,
@@ -73,11 +77,11 @@ const TEXT_ROUND: TextStyle = {
   ...BOLD,
   textAlign: "center",
   fontSize:50,
-  flex:0.15
+  flex:0.12
 }
 const PLAY: ViewStyle = {
   alignItems:"center",
-  flex:0.20
+  flex:0.13
 }
 const TEXT_PLAY: TextStyle = {
   ...TEXT,
@@ -104,9 +108,12 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
   ({ navigation }) => {
     const nextScreen = () => navigation.navigate("settings")
 
+
+
     return (
       <View testID="WelcomeScreen" style={FULL}>
-        <GradientBackground colors={["#422443", "#281b34"]} />
+        <GradientBackground colors={["#000000", "#000000"]} />
+        <ImageBackground source={image} resizeMode="contain" style={IMAGE}>
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.boxing" style={HEADER} titleStyle={HEADER_TITLE} />
           <Text style={TEXT_BOXING}>classic boxing</Text>
@@ -116,6 +123,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
           </View>
           <View style={TIME}>
             <Text style={TEXT_TIME}>03:00</Text>
+
           </View>
           <Text style={TEXT_ROUND}>Round 1/2</Text>
           <TouchableOpacity style={PLAY}>
@@ -126,6 +134,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
           </TouchableOpacity>
 
         </Screen>
+        </ImageBackground>
       </View>
     )
   },

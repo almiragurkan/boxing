@@ -64,7 +64,7 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
 
   return (
     <View testID="SettingsScreen" style={FULL}>
-      <GradientBackground colors={["#422443", "#281b34"]} />
+      <GradientBackground colors={["#000000", "#000000"]} />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header
           headerTx="settingsScreen.setting"
@@ -150,7 +150,50 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
           <Text style={TEXT_ITEM_}>Inner round alert</Text>
           <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
         </View>
+        <Text style={TEXT_TITLE}>Background Colors</Text>
+        <Text style={TEXT_TITLE}>Other</Text>
+        <View>
+          <Text style={TEXT_ITEM}>Hide panel</Text>
+          <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
+        </View>
         <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM}>Enable voice output</Text>
+          <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
+        </View>
+        <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM}>Device TTS Setting</Text>
+          <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
+        </View>
+        <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM}>Keep Screen On</Text>
+        </View>
+        <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM}>'Media' sound stream</Text>
+          <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
+        </View>
+        <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM_}>Language</Text>
+          <Text style={TEXT_SUBITEM}>Default</Text>
+        </View>
+        <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM}>Help us translate</Text>
+        </View>
+        <Text style={TEXT_TITLE}>Paid Version</Text>
+        <View>
+          <Text style={TEXT_ITEM}>Buy paid version</Text>
+          <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
+        </View>
+        <View style={LINE}></View>
+        <View>
+          <Text style={TEXT_ITEM}>User id</Text>
+          <Text style={TEXT_SUBITEM}>123456</Text>
+        </View>
 
 
       </Screen>
