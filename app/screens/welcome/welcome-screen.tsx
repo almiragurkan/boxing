@@ -5,10 +5,12 @@ import { observer } from "mobx-react-lite"
 import {
   Header,
   Screen,
-  GradientBackground,
+  GradientBackground, Icon,
 } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
+import Timer from "../../components/timer/timer"
+
 
 const image = require("../screens/welcome/logo2.png")
 
@@ -66,12 +68,7 @@ const TIME: ViewStyle = {
   paddingVertical:spacing[8],
   flex:0.25,
 }
-const TEXT_TIME: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  textAlign: "center",
-  fontSize:130,
-}
+
 const TEXT_ROUND: TextStyle = {
   ...TEXT,
   ...BOLD,
@@ -83,7 +80,7 @@ const PLAY: ViewStyle = {
   alignItems:"center",
   flex:0.13
 }
-const TEXT_PLAY: TextStyle = {
+/* const TEXT_PLAY: TextStyle = {
   ...TEXT,
   ...BOLD,
   borderRadius:50,
@@ -93,7 +90,7 @@ const TEXT_PLAY: TextStyle = {
   paddingVertical:10,
   paddingHorizontal:15,
   fontSize:30,
-}
+} */
 const SETTING: ViewStyle = {
   flex:0.10,
 }
@@ -107,6 +104,18 @@ const TEXT_SETTING: TextStyle = {
 export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> = observer(
   ({ navigation }) => {
     const nextScreen = () => navigation.navigate("settings")
+
+/*
+    const [iconName, setIconName] = useState("bug");
+    const switchIcon = () => {
+      if(iconName === "bug" ){
+        setIconName("bullet")
+      }
+      else{
+        setIconName("bug")
+      }
+    }
+*/
 
 
 
@@ -122,12 +131,12 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <Text style={TEXT_WORK_REST}>Rest</Text>
           </View>
           <View style={TIME}>
-            <Text style={TEXT_TIME}>03:00</Text>
-
+            <Timer initialMinute={3} initialSeconds={0}></Timer>
           </View>
           <Text style={TEXT_ROUND}>Round 1/2</Text>
           <TouchableOpacity style={PLAY}>
-            <Text style={TEXT_PLAY}>▶</Text>
+            {/* onPress={switchIcon} */}
+            <Icon icon="bug"></Icon>
           </TouchableOpacity>
           <TouchableOpacity style={SETTING} onPress={nextScreen}>
             <Text style={TEXT_SETTING}>✻</Text>
