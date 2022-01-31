@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useRef } from "react"
 import { View, ViewStyle, TextStyle, Text, TouchableOpacity, ImageBackground } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -9,7 +9,7 @@ import {
 } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
-import Timer from "../../components/timer/timer"
+import {Countdown} from 'react-native-element-timer';
 
 
 const image = require("../screens/welcome/logo2.png")
@@ -68,6 +68,13 @@ const TIME: ViewStyle = {
   paddingVertical:spacing[8],
   flex:0.25,
 }
+const TEXT_TIME: TextStyle = {
+  color: color.palette.white,
+  fontFamily: typography.primary,
+  fontWeight: "bold",
+  textAlign: "center",
+  fontSize:130,
+}
 
 const TEXT_ROUND: TextStyle = {
   ...TEXT,
@@ -77,6 +84,8 @@ const TEXT_ROUND: TextStyle = {
   flex:0.12
 }
 const PLAY: ViewStyle = {
+  flexDirection:"row",
+  justifyContent:"center",
   alignItems:"center",
   flex:0.13
 }
@@ -105,17 +114,20 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
   ({ navigation }) => {
     const nextScreen = () => navigation.navigate("settings")
 
-/*
-    const [iconName, setIconName] = useState("bug");
+    const countdownRef = useRef(null);
+
+/*     const [iconName, setIconName] = useState("bug");
+
     const switchIcon = () => {
       if(iconName === "bug" ){
-        setIconName("bullet")
+        /!* onPress={() => {countdownRef.current.resume()}} *!/
+        setIconName("back")
       }
       else{
+        /!* onPress={() => {countdownRef.current.pause()}} *!/
         setIconName("bug")
       }
-    }
-*/
+    } */
 
 
 
@@ -131,13 +143,32 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <Text style={TEXT_WORK_REST}>Rest</Text>
           </View>
           <View style={TIME}>
-            <Timer initialMinute={3} initialSeconds={0}></Timer>
+            <Countdown
+              ref={countdownRef}
+              textStyle={TEXT_TIME}
+              initialSeconds={180}
+              onTimes={e => {}}
+              onPause={e => {}}
+              onEnd={(e) => {}}
+            />
           </View>
           <Text style={TEXT_ROUND}>Round 1/2</Text>
-          <TouchableOpacity style={PLAY}>
-            {/* onPress={switchIcon} */}
-            <Icon icon="bug"></Icon>
-          </TouchableOpacity>
+          <View style={PLAY}>
+            <TouchableOpacity  onPress={() => {countdownRef.current.start()}}>
+              {/* onPress={switchIcon} */}
+              <Icon icon="iconsPlayButton"></Icon>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {countdownRef.current.pause()}}>
+              <Icon icon="iconsPauseButton"></Icon>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {countdownRef.current.resume()}}>
+              <Icon icon="bug"></Icon>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {countdownRef.current.stop()}}>
+              <Icon icon="bullet"></Icon>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity style={SETTING} onPress={nextScreen}>
             <Text style={TEXT_SETTING}>✻</Text>
           </TouchableOpacity>
