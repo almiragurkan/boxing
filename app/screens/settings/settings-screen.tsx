@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Text, TextStyle, View, ViewStyle } from "react-native"
 import { GradientBackground, Header, Screen } from "../../components"
@@ -7,6 +7,11 @@ import { GradientBackground, Header, Screen } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../navigators"
+import {
+  DropdownNumber,
+  PickerItem, PickerTime,
+} from "react-native-ultimate-modal-picker"
+import { Picker } from "@react-native-picker/picker"
 
 const FULL: ViewStyle = { flex: 1 }
 const BOLD: TextStyle = { fontWeight: "bold" }
@@ -58,9 +63,28 @@ const LINE: ViewStyle = {
   marginVertical:5
 }
 
+
 export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">> = observer(
   ({ navigation }) => {
     const goBack = () => navigation.goBack()
+
+    // Dropdowns
+    const [ numberValue, setNumberValue ] = useState<string>('');
+    const [ time, setTime ] = useState<Date>(new Date());
+
+    const items: Array<PickerItem> = [
+      { label: '1', value: '1' },
+      { label: '2', value: '2' },
+      { label: '3', value: '3' },
+      { label: '4', value: '4' },
+      { label: '5', value: '5' },
+      { label: '6', value: '6' },
+      { label: '7', value: '7' },
+      { label: '8', value: '8' },
+      { label: '9', value: '9' },
+      { label: '10', value: '10' },
+    ];
+
 
   return (
     <View testID="SettingsScreen" style={FULL}>
@@ -81,11 +105,31 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
         <View style={LINE}></View>
         <View>
           <Text style={TEXT_ITEM_}>Number of rounds</Text>
-          <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
+          <DropdownNumber
+            onChange={(value: string) => setNumberValue(value)}
+            darkMode={true}
+              customStyleContainer={{
+              containerLight: {
+              backgroundColor: '#000000',
+              borderColor: '#000000',
+              borderBottomWidth: 2,
+            },
+              containerDark: {
+              backgroundColor: 'rgba(255,255,255,0.49)',
+              borderColor: '#000000',
+              borderBottomWidth: 2,
+            },
+            }}
+          />
         </View>
         <View style={LINE}></View>
         <View>
           <Text style={TEXT_ITEM_}>Time of round</Text>
+          <PickerTime
+            title="Tıme"
+            onChange={(date: Date) => setTime(date)}
+            mode="spinner"
+          />
           <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
         </View>
         <View style={LINE}></View>

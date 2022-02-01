@@ -116,21 +116,6 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
 
     const countdownRef = useRef(null);
 
-/*     const [iconName, setIconName] = useState("bug");
-
-    const switchIcon = () => {
-      if(iconName === "bug" ){
-        /!* onPress={() => {countdownRef.current.resume()}} *!/
-        setIconName("back")
-      }
-      else{
-        /!* onPress={() => {countdownRef.current.pause()}} *!/
-        setIconName("bug")
-      }
-    } */
-
-
-
     return (
       <View testID="WelcomeScreen" style={FULL}>
         <GradientBackground colors={["#000000", "#000000"]} />
