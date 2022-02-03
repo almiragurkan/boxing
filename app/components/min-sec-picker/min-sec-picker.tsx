@@ -5,7 +5,7 @@ import { color, typography } from "../../theme"
 import { Text } from "../text/text"
 import { Picker } from "@react-native-picker/picker"
 import { Icon } from "../icon/icon"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const CONTAINER: ViewStyle = {
   borderWidth: 0.5,
@@ -45,7 +45,25 @@ const secondsToMinutes = (seconds: number) => {
   const mins = (seconds - secs) / 60
   return { mins, secs }
 }
-const zeroPad = (num, places) => String(num).padStart(places, '0')
+const zeroPad = (num, places) => String(num).padStart(places, "0")
+
+const generateMinutes = () => {
+  const result = []
+  for (let i = 0; i < 60; i++) {
+    result.push(<Picker.Item label={i.toString()} value={i} key={"mins" + i} />)
+  }
+
+  return result
+}
+
+const generateSeconds = () => {
+  const result = []
+  for (let i = 0; i < 60; i++) {
+    result.push(<Picker.Item label={i.toString()} value={i} key={"secs" + i} />)
+  }
+
+  return result
+}
 
 /**
  * Describe your component here
@@ -63,7 +81,8 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
     <View style={styles}>
       <View style={{ flex: 0.9 }}>
         <Text style={STYLE_PICKER_LABEL}>{labelText}</Text>
-        <Text style={STYLE_PICKER_LABEL_SMALL}>{labelTextSmall} ({zeroPad(timeOfRoundsMin,2)}:{zeroPad(timeOfRoundsSec,2)})</Text>
+        <Text
+          style={STYLE_PICKER_LABEL_SMALL}>{labelTextSmall} ({zeroPad(timeOfRoundsMin, 2)}:{zeroPad(timeOfRoundsSec, 2)})</Text>
         {
           showTimeOfRounds ?
             <View style={{ marginBottom: 10 }}>
@@ -73,39 +92,25 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
                   selectedValue={timeOfRoundsMin}
                   onValueChange={(itemValue, itemIndex) => {
                     setTimeOfRoundsMin(itemValue)
-                  }
-                  }
+                  }}
                   itemStyle={{ color: color.palette.white }}
                 >
-                  <Picker.Item label="1" value="1" />
-                  <Picker.Item label="2" value="2" />
-                  <Picker.Item label="3" value="3" />
-                  <Picker.Item label="4" value="4" />
-                  <Picker.Item label="5" value="5" />
-                  <Picker.Item label="6" value="6" />
+                  {generateMinutes()}
                 </Picker>
                 <Picker
                   style={{ flex: 0.5 }}
                   selectedValue={timeOfRoundsSec}
                   onValueChange={(itemValue, itemIndex) => {
                     setTimeOfRoundsSec(itemValue)
-                  }
-                  }
+                  }}
                   itemStyle={{ color: color.palette.white }}
                 >
-                  <Picker.Item label="1" value="1" />
-                  <Picker.Item label="2" value="2" />
-                  <Picker.Item label="3" value="3" />
-                  <Picker.Item label="4" value="4" />
-                  <Picker.Item label="5" value="5" />
-                  <Picker.Item label="6" value="6" />
+                  {generateSeconds()}
                 </Picker>
               </View>
               <Text style={{ color: color.palette.white, fontSize: 20, textAlign: "center", ...BOLD }}
                     onPress={() => setShowTimeOfRounds(false)}>Tamam</Text>
             </View>
-
-
             :
             null
         }

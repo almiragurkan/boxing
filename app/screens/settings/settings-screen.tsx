@@ -235,7 +235,9 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
             </View>
           </View>
           {/* Setting Time of Round Ends */}
-          <MinSecPicker labelText="Time of Bla bla" labelTextSmall="denme deme" valueInSeconds={123}/>
+
+          <MinSecPicker labelText="Time of Bla bla" labelTextSmall="denme deme" valueInSeconds={233}/>
+
           <View>
             <Text style={TEXT_ITEM_}>Time of rest</Text>
             <Text style={TEXT_SUBITEM}>classic boxing(Time 47:00)</Text>
