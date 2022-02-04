@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { ImageStyle, StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, spacing, typography } from "../../theme"
 import { Text } from "../text/text"
@@ -15,7 +15,29 @@ const CONTAINER: ViewStyle = {
   flexDirection: "row",
   justifyContent: "space-between",
 }
-
+const SUB_CONTAINER: ViewStyle = {
+  flex: 0.9
+}
+const SUB_CONTAINER2: ViewStyle = {
+  flex: 0.1
+}
+const INNER_VIEW1: ViewStyle = {
+  marginBottom: 10
+}
+const INNER_VIEW2: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "center"
+}
+const BOLD: TextStyle = {
+  fontWeight: "bold"
+}
+const STYLE_PICKER: ViewStyle = {
+  flex: 0.5,
+  backgroundColor: color.palette.lightGrey
+}
+const STYLE_PICKER_ITEM: TextStyle = {
+  color: color.palette.white
+}
 const STYLE_PICKER_LABEL: TextStyle = {
   fontFamily: typography.primary,
   fontSize: 18,
@@ -28,8 +50,21 @@ const STYLE_PICKER_LABEL_SMALL: TextStyle = {
   paddingStart: spacing[2],
   paddingBottom: spacing[1],
 }
+const STYLE_OK_BUTTON: ViewStyle = {
+  borderColor: color.palette.lightGrey,
+  borderBottomWidth: 1.5,
+  borderLeftWidth: 1.5,
+  borderRightWidth: 1.5,
+}
+const STYLE_OK_BUTTON_TEXT: TextStyle = {
+  color: color.palette.white,
+  fontSize: 20,
+  textAlign: "center", ...BOLD
+}
+const STYLE_ICON: ImageStyle = {
+  width: 18, height: 25
+}
 
-const BOLD: TextStyle = { fontWeight: "bold" }
 
 export interface MinSecPickerProps {
   /**
@@ -92,56 +127,58 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
 
   return (
     <View style={styles}>
-      <View style={{ flex: 0.9 }}>
-        <TouchableOpacity onPress={() => {onPressDropdown()}}>
+      <View style={SUB_CONTAINER}>
+        <TouchableOpacity onPress={() => {
+          onPressDropdown()
+        }}>
           <Text style={STYLE_PICKER_LABEL}>{labelText}</Text>
         </TouchableOpacity>
-          <Text
-            style={STYLE_PICKER_LABEL_SMALL}>{labelTextSmall} ({zeroPad(timeOfRoundsMin, 2)}:{zeroPad(timeOfRoundsSec, 2)})</Text>
-          {
-            showTimeOfRounds ?
-              <View style={{ marginBottom: 10 }}>
-                <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                  <Picker
-                    style={{ flex: 0.5, backgroundColor:color.palette.lightGrey}}
-                    selectedValue={timeOfRoundsMin}
-                    onValueChange={(itemValue, itemIndex) => {
-                      setTimeOfRoundsMin(itemValue)
-                    }}
-                    itemStyle={{ color: color.palette.white }}
-                  >
-                    {generateMinutes()}
-                  </Picker>
-                  <Picker
-                    style={{ flex: 0.5, backgroundColor:color.palette.lightGrey}}
-                    selectedValue={timeOfRoundsSec}
-                    onValueChange={(itemValue, itemIndex) => {
-                      setTimeOfRoundsSec(itemValue)
-                    }}
-                    itemStyle={{ color: color.palette.white }}
-                  >
-                    {generateSeconds()}
-                  </Picker>
-                </View>
-                <TouchableOpacity style={{ borderColor:color.palette.lightGrey, borderBottomWidth:1.5, borderLeftWidth:1.5, borderRightWidth:1.5 }}>
-                  <Text style={{ color: color.palette.white, fontSize: 20, textAlign: "center", ...BOLD }}
-                        onPress={() => setShowTimeOfRounds(false)}>Tamam</Text>
-                </TouchableOpacity>
-
+        <Text
+          style={STYLE_PICKER_LABEL_SMALL}>{labelTextSmall} ({zeroPad(timeOfRoundsMin, 2)}:{zeroPad(timeOfRoundsSec, 2)})</Text>
+        {
+          showTimeOfRounds ?
+            <View style={INNER_VIEW1}>
+              <View style={INNER_VIEW2}>
+                <Picker
+                  style={STYLE_PICKER}
+                  selectedValue={timeOfRoundsMin}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setTimeOfRoundsMin(itemValue)
+                  }}
+                  itemStyle={{ color: color.palette.white }}
+                >
+                  {generateMinutes()}
+                </Picker>
+                <Picker
+                  style={STYLE_PICKER}
+                  selectedValue={timeOfRoundsSec}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setTimeOfRoundsSec(itemValue)
+                  }}
+                  itemStyle={STYLE_PICKER_ITEM}
+                >
+                  {generateSeconds()}
+                </Picker>
               </View>
-              :
-              null
-          }
+              <TouchableOpacity style={STYLE_OK_BUTTON}>
+                <Text style={STYLE_OK_BUTTON_TEXT}
+                      onPress={() => setShowTimeOfRounds(false)}>Tamam</Text>
+              </TouchableOpacity>
 
-
+            </View>
+            :
+            null
+        }
       </View>
-      <View style={{ flex: 0.1 }}>
-        <TouchableOpacity onPress={() => {onPressDropdown()}}>
+      <View style={SUB_CONTAINER2}>
+        <TouchableOpacity onPress={() => {
+          onPressDropdown()
+        }}>
           {
             showTimeOfRounds ?
-              <Icon style={{width:18, height:25}} icon="iconsDropdownButton" />
+              <Icon style={STYLE_ICON} icon="iconsDropdownButton" />
               :
-              <Icon style={{width:18, height:25}} icon="iconsDropdownRightButton" />
+              <Icon style={STYLE_ICON} icon="iconsDropdownRightButton" />
           }
         </TouchableOpacity>
       </View>
