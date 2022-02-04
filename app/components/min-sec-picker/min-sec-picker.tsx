@@ -1,11 +1,11 @@
 import * as React from "react"
 import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, typography } from "../../theme"
+import { color, spacing, typography } from "../../theme"
 import { Text } from "../text/text"
 import { Picker } from "@react-native-picker/picker"
 import { Icon } from "../icon/icon"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 const CONTAINER: ViewStyle = {
   borderWidth: 0.5,
@@ -17,13 +17,15 @@ const CONTAINER: ViewStyle = {
 
 const STYLE_PICKER_LABEL: TextStyle = {
   fontFamily: typography.primary,
-  fontSize: 14,
-  color: color.primary,
+  fontSize: 18,
+  color: color.palette.white,
 }
 const STYLE_PICKER_LABEL_SMALL: TextStyle = {
   fontFamily: typography.primary,
-  fontSize: 8,
-  color: color.primary,
+  fontSize: 12,
+  color: color.palette.white,
+  paddingStart: spacing[2],
+  paddingBottom: spacing[1]
 }
 
 const BOLD: TextStyle = { fontWeight: "bold" }
