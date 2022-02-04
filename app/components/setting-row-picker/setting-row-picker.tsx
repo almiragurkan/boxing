@@ -83,6 +83,7 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
       <View style={STYLE_INNER_VIEW1}>
         <TouchableOpacity onPress={() => {onPressDropdown()}}>
           <Text style={labelStyle}>{labelText}</Text>
+        </TouchableOpacity>
           <Text style={labelSmallStyle}>{pickerLabel}</Text>
           {
             showPicker ?
@@ -102,15 +103,14 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
               :
               null
           }
-        </TouchableOpacity>
       </View>
       <View style={STYLE_INNER_VIEW2}>
         <TouchableOpacity onPress={() => {onPressDropdown()}}>
           {
           showPicker ?
-            <Icon style={{width:25}} icon="iconsDropdownButton" />
+            <Icon style={{width:18, height:18}} icon="iconsDropdownButton" />
             :
-            <Icon style={{width:25}} icon="iconsDropdownRightButton" />
+            <Icon style={{width:18, height:18}} icon="iconsDropdownRightButton" />
           }
         </TouchableOpacity>
       </View>

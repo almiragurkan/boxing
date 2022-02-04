@@ -6,13 +6,11 @@ import {
   Text,
   TouchableOpacity,
   ImageBackground,
-  SafeAreaView,
   StyleProp, ImageStyle,
 } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
-  Header,
   Screen,
   GradientBackground, Icon,
 } from "../../components"
@@ -39,32 +37,12 @@ const TEXT: TextStyle = {
   fontFamily: typography.primary,
 }
 const BOLD: TextStyle = { fontWeight: "bold" }
-const HEADER: TextStyle = {
-  paddingTop: spacing[3],
-  paddingBottom: spacing[4] + spacing[1],
-  paddingHorizontal: 0,
-}
-const HEADER_TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 12,
-  lineHeight: 15,
-  textAlign: "center",
-  letterSpacing: 1.5,
-}
 const TEXT_BOXING: TextStyle = {
   ...TEXT,
   ...BOLD,
   textAlign: "center",
   fontSize: 20,
   padding: spacing[4],
-}
-
-
-const TIME: ViewStyle = {
-  alignItems: "center",
-  paddingVertical: spacing[8],
-  flex: 0.25,
 }
 const TEXT_TIME: TextStyle = {
   color: color.palette.white,
@@ -73,7 +51,6 @@ const TEXT_TIME: TextStyle = {
   textAlign: "center",
   fontSize: 130,
 }
-
 const SETTING: ViewStyle = {
   flex: 0.10,
 }
@@ -173,11 +150,6 @@ const STYLE_ICON_BUTTONS: StyleProp<ImageStyle> = {
 const STYLE_SETTINGS_BUTTONS: StyleProp<ImageStyle> = {
   height: 48,
   width: 48,
-}
-const PLAY: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
 }
 const WORK_REST: ViewStyle = {
   flexDirection: "row",

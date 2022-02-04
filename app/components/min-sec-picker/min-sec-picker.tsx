@@ -95,6 +95,7 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
       <View style={{ flex: 0.9 }}>
         <TouchableOpacity onPress={() => {onPressDropdown()}}>
           <Text style={STYLE_PICKER_LABEL}>{labelText}</Text>
+        </TouchableOpacity>
           <Text
             style={STYLE_PICKER_LABEL_SMALL}>{labelTextSmall} ({zeroPad(timeOfRoundsMin, 2)}:{zeroPad(timeOfRoundsSec, 2)})</Text>
           {
@@ -131,16 +132,16 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
               :
               null
           }
-        </TouchableOpacity>
+
 
       </View>
       <View style={{ flex: 0.1 }}>
         <TouchableOpacity onPress={() => {onPressDropdown()}}>
           {
             showTimeOfRounds ?
-              <Icon style={{width:25}} icon="iconsDropdownButton" />
+              <Icon style={{width:18, height:25}} icon="iconsDropdownButton" />
               :
-              <Icon style={{width:25}} icon="iconsDropdownRightButton" />
+              <Icon style={{width:18, height:25}} icon="iconsDropdownRightButton" />
           }
         </TouchableOpacity>
       </View>
