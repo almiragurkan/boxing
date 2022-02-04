@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { TrainingProfileModel, TrainingProfileSnapshot } from "../training-profile/training-profile"
 import { withEnvironment } from "../extensions/with-environment"
-import { noop } from "mobx/dist/utils/utils"
+
 
 export const TrainingProfileStoreModel = types
   .model("TrainingProfileStore")
@@ -13,15 +13,9 @@ export const TrainingProfileStoreModel = types
     saveProfiles: (profileSnapshots: TrainingProfileSnapshot[]) => {
       self.profiles.replace(profileSnapshots)
     },
-    saveProfile: (id: number) => {
-      noop()
-    },
-    getProfile: (id: number) => {
-      noop()
-    },
-    updateProfile: (profile: TrainingProfileSnapshot) => {
-      noop()
-    },
+    saveProfile: (id: number) => {},
+    getProfile: (id: number) => {},
+    updateProfile: (profile: TrainingProfileSnapshot) => {},
   }))
 
 

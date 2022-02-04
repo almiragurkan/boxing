@@ -25,7 +25,7 @@ const STYLE_PICKER_LABEL_SMALL: TextStyle = {
   fontSize: 12,
   color: color.palette.white,
   paddingStart: spacing[2],
-  paddingBottom: spacing[1]
+  paddingBottom: spacing[1],
 }
 
 const STYLE_INNER_VIEW1: ViewStyle = {
@@ -55,9 +55,7 @@ const generateItems = (itemArray) => {
   return result
 }
 
-/**
- * Describe your component here
- */
+
 export const SettingRowPicker = observer(function SettingRowPicker(props: SettingRowPickerProps) {
   const { style, value, styleLabel, styleSmallLabel, labelText, dataSource } = props
   const styles = Object.assign({}, CONTAINER, style)
@@ -67,12 +65,13 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
   const gItem = generateItems(dataSource)
   const [showPicker, setShowPicker] = useState(false)
   const [pickerValue, setPickerValue] = useState(value)
+  const [pickerLabel, setPickerLabel] = useState("")
 
   return (
     <View style={styles}>
       <View style={STYLE_INNER_VIEW1}>
         <Text style={labelStyle}>{labelText}</Text>
-        <Text style={labelSmallStyle}>{value}</Text>
+        <Text style={labelSmallStyle}>{pickerLabel}</Text>
         {
           showPicker ?
             <Picker
@@ -80,8 +79,8 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
               onValueChange={(itemValue, itemIndex) => {
                 setPickerValue(itemValue)
                 setShowPicker(false)
-              }
-              }
+                setPickerLabel(dataSource[itemIndex].label)
+              }}
               itemStyle={{ color: color.palette.white }}
             >
               {gItem}

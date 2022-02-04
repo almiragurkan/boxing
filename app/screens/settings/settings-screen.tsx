@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Text, TextStyle, View, ViewStyle } from "react-native"
 import {
@@ -11,6 +11,8 @@ import {
 import { color, spacing, typography } from "../../theme"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../navigators"
+import { useStores } from "../../models"
+import { defaultTrainingModelData } from "../../models/training-profile/training-profile-default"
 
 const FULL: ViewStyle = { flex: 1 }
 const BOLD: TextStyle = { fontWeight: "bold" }
@@ -64,10 +66,48 @@ const TEXT_TITLE: TextStyle = {
 //   marginVertical: 5,
 // }
 
+const savedProfilesToPickerDatasource = (profiles) => {
+  const results = []
+  for (let i = 0; i < profiles.length; i++) {
+    results.push({
+      label: profiles[i].name,
+      value: profiles[i].id,
+    })
+  }
+  return results
+}
 
+const getSelectedProfile = (profileName: string, profileStore) => {
+  for (let i = 0; i < profileStore.profiles.length; i++) {
+    if (profileStore.profiles[i].name === profileName)
+      return profileStore.profiles[i]
+  }
+
+  return [
+    defaultTrainingModelData,
+  ] // TODO: create an default profile in a separate file
+}
+
+const generateRoundsPicker = (rounds: number) => {
+  const result = []
+  for (let i = 1; i <= rounds; i++) {
+    result.push({ label: i.toString(), value: i })
+  }
+  return result
+}
 export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">> = observer(
   ({ navigation }) => {
     const goBack = () => navigation.goBack()
+    const { profileTrainingStore } = useStores()
+
+    if (profileTrainingStore.profiles.length <= 0){
+      profileTrainingStore.saveProfiles([defaultTrainingModelData])
+    }
+
+    const defaultProfileName = profileTrainingStore.profiles[0] ? profileTrainingStore.profiles[0].name : "default"
+    const [selectedProfileName, setSelectedProfileName] = useState(defaultProfileName)
+
+    const selectedProfile = getSelectedProfile(selectedProfileName, profileTrainingStore)
 
     return (
       <View testID="SettingsScreen" style={FULL}>
@@ -83,12 +123,12 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
           <Text style={TEXT_TITLE}>Profile Settings</Text>
 
           <SettingRowPicker
-            dataSource={[{ label: "Classic", value: "classic" }, { label: "Custom", value: "custom" }]}
-            labelText="Profile" value="custom" />
+            dataSource={savedProfilesToPickerDatasource(profileTrainingStore.profiles)}
+            labelText="Profile" value={selectedProfile.id} />
 
           <SettingRowPicker
-            dataSource={[{ label: "1", value: 1 }, { label: "2", value: 2 }]}
-            labelText="Number of Rounds" value={2} />
+            dataSource={generateRoundsPicker(6)}
+            labelText="Number of Rounds" value={selectedProfile.rounds} />
 
           <MinSecPicker labelText="Time of Round" labelTextSmall="02:30" valueInSeconds={233} />
           <MinSecPicker labelText="Time of Rest" labelTextSmall="03:30" valueInSeconds={233} />
@@ -185,5 +225,5 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
         </Screen>
       </View>
     )
-  }
+  },
 )
