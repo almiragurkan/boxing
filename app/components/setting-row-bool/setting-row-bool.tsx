@@ -46,13 +46,13 @@ export const SettingRowBool = observer(function SettingRowBool(props: SettingRow
   const { style,labelText,labelTextSmall,styleLabel,styleSmallLabel } = props
   const styles = Object.assign({}, CONTAINER, style)
   const labelStyle = Object.assign({}, STYLE_PICKER_LABEL,styleLabel )
-  const labelSmalStyle = Object.assign({}, STYLE_PICKER_LABEL_SMALL,styleSmallLabel )
+  const labelSmallStyle = Object.assign({}, STYLE_PICKER_LABEL_SMALL,styleSmallLabel )
 
   return (
     <View style={styles}>
       <View style={STYLE_INNER_VIEW1}>
         <Text style={labelStyle}>{labelText}</Text>
-        <Text style={labelSmalStyle}>{labelTextSmall}</Text>
+        <Text style={labelSmallStyle}>{labelTextSmall}</Text>
       </View>
       <View>
         <Switch />

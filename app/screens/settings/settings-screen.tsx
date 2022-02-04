@@ -185,5 +185,5 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
         </Screen>
       </View>
     )
-  },
+  }
 )
