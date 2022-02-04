@@ -130,11 +130,11 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
             dataSource={generateRoundsPicker(6)}
             labelText="Number of Rounds" value={selectedProfile.rounds} />
 
-          <MinSecPicker labelText="Time of Round" labelTextSmall="02:30" valueInSeconds={233} />
-          <MinSecPicker labelText="Time of Rest" labelTextSmall="03:30" valueInSeconds={233} />
-          <MinSecPicker labelText="Time round warning" labelTextSmall="00:00" valueInSeconds={233} />
-          <MinSecPicker labelText="Inner periodic alert" labelTextSmall="00:00" valueInSeconds={233} />
-          <MinSecPicker labelText="Time of prepare" labelTextSmall="00:05" valueInSeconds={233} />
+          <MinSecPicker labelText="Time of Round" valueInSeconds={233} />
+          <MinSecPicker labelText="Time of Rest" valueInSeconds={233} />
+          <MinSecPicker labelText="Time round warning" valueInSeconds={233} />
+          <MinSecPicker labelText="Inner periodic alert"  valueInSeconds={233} />
+          <MinSecPicker labelText="Time of prepare" valueInSeconds={233} />
 
           <SettingRowBool
             labelText="Signal the end of rest"

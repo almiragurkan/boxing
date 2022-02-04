@@ -6,6 +6,7 @@ import { Text } from "../text/text"
 import { Picker } from "@react-native-picker/picker"
 import { Icon } from "../icon/icon"
 import { useState } from "react"
+import { useKeepAwake } from "expo-keep-awake"
 
 const CONTAINER: ViewStyle = {
   borderWidth: 0.5,
@@ -67,31 +68,50 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
   const [pickerValue, setPickerValue] = useState(value)
   const [pickerLabel, setPickerLabel] = useState("")
 
+  const onPressDropdown = () => {
+    if (showPicker === false) {
+      setShowPicker(true)
+
+    } else if (showPicker === true) {
+      setShowPicker(false)
+    }
+  }
+  useKeepAwake()
+
   return (
     <View style={styles}>
       <View style={STYLE_INNER_VIEW1}>
-        <Text style={labelStyle}>{labelText}</Text>
-        <Text style={labelSmallStyle}>{pickerLabel}</Text>
-        {
-          showPicker ?
-            <Picker
-              selectedValue={pickerValue}
-              onValueChange={(itemValue, itemIndex) => {
-                setPickerValue(itemValue)
-                setShowPicker(false)
-                setPickerLabel(dataSource[itemIndex].label)
-              }}
-              itemStyle={{ color: color.palette.white }}
-            >
-              {gItem}
-            </Picker>
-            :
-            null
-        }
+        <TouchableOpacity onPress={() => {onPressDropdown()}}>
+          <Text style={labelStyle}>{labelText}</Text>
+          <Text style={labelSmallStyle}>{pickerLabel}</Text>
+          {
+            showPicker ?
+              <Picker
+                style={{ marginBottom:3, flex: 0.5, backgroundColor:color.palette.lightGrey}}
+                selectedValue={pickerValue}
+                onValueChange={(itemValue, itemIndex) => {
+                  setPickerValue(itemValue)
+                  setShowPicker(false)
+                  setPickerLabel(dataSource[itemIndex].label)
+                }
+                }
+                itemStyle={{ color: color.palette.white }}
+              >
+                {gItem}
+              </Picker>
+              :
+              null
+          }
+        </TouchableOpacity>
       </View>
       <View style={STYLE_INNER_VIEW2}>
-        <TouchableOpacity onPress={() => setShowPicker(true)}>
-          <Icon icon="back" />
+        <TouchableOpacity onPress={() => {onPressDropdown()}}>
+          {
+          showPicker ?
+            <Icon style={{width:25}} icon="iconsDropdownButton" />
+            :
+            <Icon style={{width:25}} icon="iconsDropdownRightButton" />
+          }
         </TouchableOpacity>
       </View>
     </View>
