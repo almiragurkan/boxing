@@ -23,11 +23,33 @@ const image = require("../screens/welcome/logo2.png")
 
 
 const FULL: ViewStyle = { flex: 1 }
+const BOLD: TextStyle = { fontWeight: "bold" }
 const CONTAINER: ViewStyle = {
   flex: 1,
   backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
 }
+const INNER_VIEW1: ViewStyle = {
+  flex: 0.1
+}
+const INNER_VIEW2: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  flex: 0.2,
+}
+const INNER_VIEW3: ViewStyle = {
+  flex: 0.35,
+  justifyContent: "center"
+}
+const INNER_VIEW4: ViewStyle = {
+  flex: 0.2,
+  flexDirection: "row",
+  justifyContent: "center"
+}
+const INNER_VIEW5: ViewStyle = {
+  flex: 0.1,
+  flexDirection: "row",
+  justifyContent: "flex-start" }
 const IMAGE: ViewStyle = {
   flex: 1,
   justifyContent: "center",
@@ -36,7 +58,6 @@ const TEXT: TextStyle = {
   color: color.palette.white,
   fontFamily: typography.primary,
 }
-const BOLD: TextStyle = { fontWeight: "bold" }
 const TEXT_BOXING: TextStyle = {
   ...TEXT,
   ...BOLD,
@@ -53,6 +74,35 @@ const TEXT_TIME: TextStyle = {
 }
 const SETTING: ViewStyle = {
   flex: 0.10,
+}
+
+const STYLE_ICON_BUTTONS: StyleProp<ImageStyle> = {
+  height: 96,
+  width: 96,
+  marginStart: 10,
+  marginEnd: 10,
+}
+const STYLE_SETTINGS_BUTTONS: StyleProp<ImageStyle> = {
+  height: 48,
+  width: 48,
+}
+
+const TEXT_WORK_REST_VIEW: TextStyle = {
+  ...TEXT,
+  ...BOLD,
+  fontSize: 28,
+  paddingTop: spacing[4],
+  paddingBottom: spacing[2],
+}
+const TEXT_WORK_REST: TextStyle = {
+  ...TEXT,
+  ...BOLD,
+  fontSize: 28,
+}
+const TEXT_WORK_REST_VALUE: TextStyle = {
+  ...TEXT,
+  fontSize: 20,
+  textAlign: "center",
 }
 
 export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> = observer(
@@ -81,10 +131,10 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
         <GradientBackground colors={["#000000", "#000000"]} />
         <ImageBackground source={image} resizeMode="contain" style={IMAGE}>
           <Screen style={CONTAINER} preset="fixed" backgroundColor={color.transparent}>
-            <View style={{ flex: 0.1 }}>
+            <View style={INNER_VIEW1}>
               <Text style={TEXT_BOXING}>classic boxing</Text>
             </View>
-            <View style={WORK_REST}>
+            <View style={INNER_VIEW2}>
               <View style={TEXT_WORK_REST_VIEW}>
                 <Text style={TEXT_WORK_REST}>Work</Text>
                 <Text style={TEXT_WORK_REST_VALUE}>03:00</Text>
@@ -98,7 +148,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
                 <Text style={TEXT_WORK_REST_VALUE}>00:30</Text>
               </View>
             </View>
-            <View style={{ flex: 0.35, justifyContent: "center" }}>
+            <View style={INNER_VIEW3}>
               <Countdown
                 ref={countdownRef}
                 textStyle={TEXT_TIME}
@@ -108,7 +158,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
                 // onEnd={}
               />
             </View>
-            <View style={{ flex: 0.2, flexDirection: "row", justifyContent: "center" }}>
+            <View style={INNER_VIEW4}>
               {counterState === "initial" || counterState === "paused" ?
                 <TouchableOpacity onPress={onPressPlayPause}>
                   <Icon icon="iconsPlayButton" style={STYLE_ICON_BUTTONS} />
@@ -129,7 +179,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
                 null
               }
             </View>
-            <View style={{ flex: 0.1, flexDirection: "row", justifyContent: "flex-start" }}>
+            <View style={INNER_VIEW5}>
               <TouchableOpacity style={SETTING} onPress={nextScreen}>
                 <Icon icon="iconsSettingsButton" style={STYLE_SETTINGS_BUTTONS} />
               </TouchableOpacity>
@@ -140,37 +190,3 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
     )
   },
 )
-
-const STYLE_ICON_BUTTONS: StyleProp<ImageStyle> = {
-  height: 96,
-  width: 96,
-  marginStart: 10,
-  marginEnd: 10,
-}
-const STYLE_SETTINGS_BUTTONS: StyleProp<ImageStyle> = {
-  height: 48,
-  width: 48,
-}
-const WORK_REST: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  flex: 0.2,
-}
-
-const TEXT_WORK_REST_VIEW: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 28,
-  paddingTop: spacing[4],
-  paddingBottom: spacing[2],
-}
-const TEXT_WORK_REST: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 28,
-}
-const TEXT_WORK_REST_VALUE: TextStyle = {
-  ...TEXT,
-  fontSize: 20,
-  textAlign: "center",
-}
