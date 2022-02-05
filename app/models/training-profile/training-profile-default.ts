@@ -5,4 +5,8 @@ export const defaultTrainingModelData = {
   timeOfRound: 180,
   timeOfRest: 200,
   timeRoundWarning: 10,
+  innerPeriodicAlert: 10,
+  timeOfPrepare: 10,
+  signalEndOfRest: true,
+  useAccelerometer: false,
 }

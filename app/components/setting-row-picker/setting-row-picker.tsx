@@ -44,6 +44,7 @@ export interface SettingRowPickerProps {
   styleSmallLabel?: TextStyle
   value?: any
   dataSource?: any
+  updateSelected: any
 }
 
 
@@ -56,9 +57,16 @@ const generateItems = (itemArray) => {
   return result
 }
 
+const getLabelByVal = (dataSource, val) => {
+  for (let i = 0; i < dataSource.length; i++) {
+    if (dataSource[i].value === val)
+      return dataSource[i].label
+  }
+  return val
+}
 
 export const SettingRowPicker = observer(function SettingRowPicker(props: SettingRowPickerProps) {
-  const { style, value, styleLabel, styleSmallLabel, labelText, dataSource } = props
+  const { style, value, styleLabel, styleSmallLabel, labelText, dataSource, updateSelected } = props
   const styles = Object.assign({}, CONTAINER, style)
   const labelStyle = Object.assign({}, STYLE_PICKER_LABEL, styleLabel)
   const labelSmallStyle = Object.assign({}, STYLE_PICKER_LABEL_SMALL, styleSmallLabel)
@@ -66,7 +74,7 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
   const gItem = generateItems(dataSource)
   const [showPicker, setShowPicker] = useState(false)
   const [pickerValue, setPickerValue] = useState(value)
-  const [pickerLabel, setPickerLabel] = useState("")
+  const [pickerLabel, setPickerLabel] = useState(getLabelByVal(dataSource, value))
 
   const onPressDropdown = () => {
     if (showPicker === false) {
@@ -81,36 +89,41 @@ export const SettingRowPicker = observer(function SettingRowPicker(props: Settin
   return (
     <View style={styles}>
       <View style={STYLE_INNER_VIEW1}>
-        <TouchableOpacity onPress={() => {onPressDropdown()}}>
+        <TouchableOpacity onPress={() => {
+          onPressDropdown()
+        }}>
           <Text style={labelStyle}>{labelText}</Text>
         </TouchableOpacity>
-          <Text style={labelSmallStyle}>{pickerLabel}</Text>
-          {
-            showPicker ?
-              <Picker
-                style={{ marginBottom:3, flex: 0.5, backgroundColor:color.palette.lightGrey}}
-                selectedValue={pickerValue}
-                onValueChange={(itemValue, itemIndex) => {
-                  setPickerValue(itemValue)
-                  setShowPicker(false)
-                  setPickerLabel(dataSource[itemIndex].label)
-                }
-                }
-                itemStyle={{ color: color.palette.white }}
-              >
-                {gItem}
-              </Picker>
-              :
-              null
-          }
+        <Text style={labelSmallStyle}>{pickerLabel}</Text>
+        {
+          showPicker ?
+            <Picker
+              style={{ marginBottom: 3, flex: 0.5, backgroundColor: color.palette.lightGrey }}
+              selectedValue={pickerValue}
+              onValueChange={(itemValue, itemIndex) => {
+                setPickerValue(itemValue)
+                setShowPicker(false)
+                setPickerLabel(dataSource[itemIndex].label)
+                updateSelected(itemValue)
+              }
+              }
+              itemStyle={{ color: color.palette.white }}
+            >
+              {gItem}
+            </Picker>
+            :
+            null
+        }
       </View>
       <View style={STYLE_INNER_VIEW2}>
-        <TouchableOpacity onPress={() => {onPressDropdown()}}>
+        <TouchableOpacity onPress={() => {
+          onPressDropdown()
+        }}>
           {
-          showPicker ?
-            <Icon style={{width:18, height:18}} icon="iconsDropdownButton" />
-            :
-            <Icon style={{width:18, height:18}} icon="iconsDropdownRightButton" />
+            showPicker ?
+              <Icon style={{ width: 18, height: 18 }} icon="iconsDropdownButton" />
+              :
+              <Icon style={{ width: 18, height: 18 }} icon="iconsDropdownRightButton" />
           }
         </TouchableOpacity>
       </View>

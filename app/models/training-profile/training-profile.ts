@@ -12,12 +12,23 @@ export const TrainingProfileModel = types
     timeOfRound: types.maybe(types.number), // in seconds
     timeOfRest: types.maybe(types.number), // in seconds
     timeRoundWarning: types.maybe(types.number), // in seconds
+    innerPeriodicAlert: types.maybe(types.number),
+    timeOfPrepare: types.optional(types.number, 0, [undefined, null, NaN]),
+    signalEndOfRest: types.maybe(types.boolean),
+    useAccelerometer: types.maybe(types.boolean),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type TrainingProfileType = Instance<typeof TrainingProfileModel>
-export interface TrainingProfile extends TrainingProfileType {}
+
+export interface TrainingProfile extends TrainingProfileType {
+}
+
 type TrainingProfileSnapshotType = SnapshotOut<typeof TrainingProfileModel>
-export interface TrainingProfileSnapshot extends TrainingProfileSnapshotType {}
+
+export interface TrainingProfileSnapshot extends TrainingProfileSnapshotType {
+}
+
 export const createTrainingProfileDefaultModel = () => types.optional(TrainingProfileModel, {})

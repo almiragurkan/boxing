@@ -100,14 +100,14 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
     const goBack = () => navigation.goBack()
     const { profileTrainingStore } = useStores()
 
-    if (profileTrainingStore.profiles.length <= 0){
+    if (profileTrainingStore.profiles.length <= 0) {
       profileTrainingStore.saveProfiles([defaultTrainingModelData])
     }
 
     const defaultProfileName = profileTrainingStore.profiles[0] ? profileTrainingStore.profiles[0].name : "default"
     const [selectedProfileName, setSelectedProfileName] = useState(defaultProfileName)
 
-    const selectedProfile = getSelectedProfile(selectedProfileName, profileTrainingStore)
+    var selectedProfile = getSelectedProfile(selectedProfileName, profileTrainingStore)
 
     return (
       <View testID="SettingsScreen" style={FULL}>
@@ -123,29 +123,37 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
           <Text style={TEXT_TITLE}>Profile Settings</Text>
 
           <SettingRowPicker
+            updateSelected={() => selectedProfile.id}
             dataSource={savedProfilesToPickerDatasource(profileTrainingStore.profiles)}
             labelText="Profile" value={selectedProfile.id} />
 
           <SettingRowPicker
-            dataSource={generateRoundsPicker(6)}
+            updateSelected={(val) => {
+              // console.log("old value : ", selectedProfile.rounds)
+              // console.log("current value : ", val)
+              // alert(selectedProfile.rounds + "----" + val)
+              // selectedProfile.updateField({ round: val })
+              // alert("selectedProfile value : " + selectedProfile.rounds)
+            }}
+            dataSource={generateRoundsPicker(200)}
             labelText="Number of Rounds" value={selectedProfile.rounds} />
 
-          <MinSecPicker labelText="Time of Round" valueInSeconds={233} />
-          <MinSecPicker labelText="Time of Rest" valueInSeconds={233} />
-          <MinSecPicker labelText="Time round warning" valueInSeconds={233} />
-          <MinSecPicker labelText="Inner periodic alert"  valueInSeconds={233} />
-          <MinSecPicker labelText="Time of prepare" valueInSeconds={233} />
+          <MinSecPicker labelText="Time of Round" valueInSeconds={selectedProfile.timeOfRound} />
+          <MinSecPicker labelText="Time of Rest" valueInSeconds={selectedProfile.timeOfRest} />
+          <MinSecPicker labelText="Time round warning" valueInSeconds={selectedProfile.timeRoundWarning} />
+          <MinSecPicker labelText="Inner periodic alert" valueInSeconds={selectedProfile.innerPeriodicAlert} />
+          <MinSecPicker labelText="Time of prepare" valueInSeconds={selectedProfile.timeOfPrepare} />
 
           <SettingRowBool
             labelText="Signal the end of rest"
             labelTextSmall="Round bitiminden 10s önce uyar"
-            defaultValue={true} />
+            defaultValue={selectedProfile.signalEndOfRest} />
 
           <Text style={TEXT_TITLE}>Sensor Settings</Text>
           <SettingRowBool
             labelText="Use accelerometer"
             labelTextSmall="Sensör ile başlat"
-            defaultValue={true} />
+            defaultValue={selectedProfile.useAccelerometer} />
 
           <SettingRowBool
             labelText="Accelerometer sensivity"
