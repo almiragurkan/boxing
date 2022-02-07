@@ -2,8 +2,8 @@
   "name": "boxing",
   "displayName": "boxing",
   "expo": {
-    "name": "boxing",
-    "slug": "boxing",
+    "name": "TKO Boxing",
+    "slug": "TKO_Boxing",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,9 +15,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

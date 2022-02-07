@@ -19,6 +19,9 @@ export const TrainingProfileModel = types
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setField: (key, value) => {
+      self[key] = value
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type TrainingProfileType = Instance<typeof TrainingProfileModel>

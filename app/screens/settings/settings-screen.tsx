@@ -44,27 +44,6 @@ const TEXT_TITLE: TextStyle = {
   marginBottom: spacing[2],
   paddingTop: spacing[1],
 }
-// const TEXT_ITEM: TextStyle = {
-//   ...TEXT,
-//   fontSize: 16,
-//   color: color.palette.white,
-// }
-// const TEXT_ITEM_: TextStyle = {
-//   ...TEXT,
-//   fontSize: 22,
-//   color: color.palette.white,
-// }
-// const TEXT_SUBITEM: TextStyle = {
-//   ...TEXT,
-//   fontSize: 12,
-//   color: color.palette.lighterGrey,
-//   paddingBottom: 5,
-// }
-// const LINE: ViewStyle = {
-//   borderWidth: 0.5,
-//   borderColor: color.palette.lightGrey,
-//   marginVertical: 5,
-// }
 
 const savedProfilesToPickerDatasource = (profiles) => {
   const results = []
@@ -85,7 +64,7 @@ const getSelectedProfile = (profileName: string, profileStore) => {
 
   return [
     defaultTrainingModelData,
-  ] // TODO: create an default profile in a separate file
+  ]
 }
 
 const generateRoundsPicker = (rounds: number) => {
@@ -105,7 +84,7 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
     }
 
     const defaultProfileName = profileTrainingStore.profiles[0] ? profileTrainingStore.profiles[0].name : "default"
-    const [selectedProfileName, setSelectedProfileName] = useState(defaultProfileName)
+    const [selectedProfileName] = useState(defaultProfileName)
 
     var selectedProfile = getSelectedProfile(selectedProfileName, profileTrainingStore)
 
@@ -123,26 +102,37 @@ export const SettingsScreen: FC<StackScreenProps<NavigatorParamList, "settings">
           <Text style={TEXT_TITLE}>Profile Settings</Text>
 
           <SettingRowPicker
-            updateSelected={() => selectedProfile.id}
+            updateSelected={(val) => selectedProfile.setField("id", val)}
             dataSource={savedProfilesToPickerDatasource(profileTrainingStore.profiles)}
             labelText="Profile" value={selectedProfile.id} />
 
           <SettingRowPicker
             updateSelected={(val) => {
-              // console.log("old value : ", selectedProfile.rounds)
-              // console.log("current value : ", val)
-              // alert(selectedProfile.rounds + "----" + val)
-              // selectedProfile.updateField({ round: val })
-              // alert("selectedProfile value : " + selectedProfile.rounds)
+              selectedProfile.setField("rounds", val)
             }}
             dataSource={generateRoundsPicker(200)}
             labelText="Number of Rounds" value={selectedProfile.rounds} />
 
-          <MinSecPicker labelText="Time of Round" valueInSeconds={selectedProfile.timeOfRound} />
-          <MinSecPicker labelText="Time of Rest" valueInSeconds={selectedProfile.timeOfRest} />
-          <MinSecPicker labelText="Time round warning" valueInSeconds={selectedProfile.timeRoundWarning} />
-          <MinSecPicker labelText="Inner periodic alert" valueInSeconds={selectedProfile.innerPeriodicAlert} />
-          <MinSecPicker labelText="Time of prepare" valueInSeconds={selectedProfile.timeOfPrepare} />
+          <MinSecPicker
+            labelText="Time of Round"
+            valueInSeconds={selectedProfile.timeOfRound}
+            updateSelected={(val) => selectedProfile.setField("timeOfRound", val)} />
+          <MinSecPicker
+            labelText="Time of Rest"
+            valueInSeconds={selectedProfile.timeOfRest}
+            updateSelected={(val) => selectedProfile.setField("timeOfRest", val)} />
+          <MinSecPicker
+            labelText="Time round warning"
+            valueInSeconds={selectedProfile.timeRoundWarning}
+            updateSelected={(val) => selectedProfile.setField("timeRoundWarning", val)} />
+          <MinSecPicker
+            labelText="Inner periodic alert"
+            valueInSeconds={selectedProfile.innerPeriodicAlert}
+            updateSelected={(val) => selectedProfile.setField("innerPeriodicAlert", val)} />
+          <MinSecPicker
+            labelText="Time of prepare"
+            valueInSeconds={selectedProfile.timeOfPrepare}
+            updateSelected={(val) => selectedProfile.setField("timeOfPrepare", val)} />
 
           <SettingRowBool
             labelText="Signal the end of rest"

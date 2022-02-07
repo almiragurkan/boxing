@@ -1,4 +1,5 @@
 import { palette } from "./palette"
+import { colorGradient } from "./color-gradient"
 
 /**
  * Roles for colors.  Prefer using these over the palette.  It makes it easier
@@ -14,12 +15,16 @@ export const color = {
    * The palette is available to use, but prefer using the name.
    */
   palette,
+
+  colorGradient,
+
   /**
    * A helper for making something see-thru. Use sparingly as many layers of transparency
    * can cause older Android devices to slow down due to the excessive compositing required
    * by their under-powered GPUs.
    */
   transparent: "rgba(0, 0, 0, 0)",
+  transparent1: "rgba(0, 0, 0, 10)",
   /**
    * The screen background.
    */

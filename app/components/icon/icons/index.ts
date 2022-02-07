@@ -9,6 +9,7 @@ export const icons = {
   iconsSettingsButton: require("./icons-settings.png"),
   iconsDropdownButton: require("./dropdown.png"),
   iconsDropdownRightButton: require("./dropdown-right.png"),
+  iconAbout: require("./icons-about.png")
 }
 
 export type IconTypes = keyof typeof icons

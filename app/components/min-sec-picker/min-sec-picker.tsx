@@ -16,27 +16,28 @@ const CONTAINER: ViewStyle = {
   justifyContent: "space-between",
 }
 const SUB_CONTAINER: ViewStyle = {
-  flex: 0.9
+  flex: 0.9,
 }
 const SUB_CONTAINER2: ViewStyle = {
-  flex: 0.1
+  flex: 0.1,
 }
 const INNER_VIEW1: ViewStyle = {
-  marginBottom: 10
+  marginBottom: 10,
+  backgroundColor: color.palette.black,
 }
 const INNER_VIEW2: ViewStyle = {
   flexDirection: "row",
-  justifyContent: "center"
+  justifyContent: "center",
 }
 const BOLD: TextStyle = {
-  fontWeight: "bold"
+  fontWeight: "bold",
 }
 const STYLE_PICKER: ViewStyle = {
   flex: 0.5,
-  backgroundColor: color.palette.lightGrey
+  backgroundColor: color.palette.pickerBg,
 }
 const STYLE_PICKER_ITEM: TextStyle = {
-  color: color.palette.white
+  color: color.palette.white,
 }
 const STYLE_PICKER_LABEL: TextStyle = {
   fontFamily: typography.primary,
@@ -51,18 +52,23 @@ const STYLE_PICKER_LABEL_SMALL: TextStyle = {
   paddingBottom: spacing[1],
 }
 const STYLE_OK_BUTTON: ViewStyle = {
-  borderColor: color.palette.lightGrey,
+  height: 40,
+  borderColor: color.palette.pickerBg1,
+  borderTopColor: color.palette.pickerBg1,
+  borderTopWidth: 1,
   borderBottomWidth: 1.5,
   borderLeftWidth: 1.5,
   borderRightWidth: 1.5,
+  justifyContent: "center",
+  backgroundColor: color.palette.pickerBg
 }
 const STYLE_OK_BUTTON_TEXT: TextStyle = {
   color: color.palette.white,
   fontSize: 20,
-  textAlign: "center", ...BOLD
+  textAlign: "center", ...BOLD,
 }
 const STYLE_ICON: ImageStyle = {
-  width: 18, height: 25
+  width: 18, height: 25,
 }
 
 
@@ -76,6 +82,7 @@ export interface MinSecPickerProps {
   valueInSeconds?: number
   styleLabel?: TextStyle
   styleSmallLabel?: TextStyle
+  updateSelected: any
 }
 
 const secondsToMinutes = (seconds: number) => {
@@ -88,7 +95,7 @@ const zeroPad = (num, places) => String(num).padStart(places, "0")
 const generateMinutes = () => {
   const result = []
   for (let i = 0; i < 60; i++) {
-    result.push(<Picker.Item label={i.toString()} value={i} key={"mins" + i} />)
+    result.push(<Picker.Item label={i.toString()} value={i} key={"mins" + i} style={STYLE_PICKER_ITEM}/>)
   }
 
   return result
@@ -107,7 +114,7 @@ const generateSeconds = () => {
  * Describe your component here
  */
 export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerProps) {
-  const { style, labelText, labelTextSmall, valueInSeconds } = props
+  const { style, labelText, labelTextSmall, valueInSeconds, updateSelected } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const { mins, secs } = secondsToMinutes(valueInSeconds)
@@ -122,6 +129,9 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
     } else if (showTimeOfRounds === true) {
       setShowTimeOfRounds(false)
     }
+  }
+  const calSeconds = (mins, secs) => {
+    return (mins * 60) + secs
   }
   useKeepAwake()
 
@@ -144,8 +154,9 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
                   selectedValue={timeOfRoundsMin}
                   onValueChange={(itemValue, itemIndex) => {
                     setTimeOfRoundsMin(itemValue)
+                    updateSelected(calSeconds(itemValue, timeOfRoundsSec))
                   }}
-                  itemStyle={{ color: color.palette.white }}
+                  itemStyle={STYLE_PICKER_ITEM}
                 >
                   {generateMinutes()}
                 </Picker>
@@ -154,6 +165,7 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
                   selectedValue={timeOfRoundsSec}
                   onValueChange={(itemValue, itemIndex) => {
                     setTimeOfRoundsSec(itemValue)
+                    updateSelected(calSeconds(timeOfRoundsMin, itemValue))
                   }}
                   itemStyle={STYLE_PICKER_ITEM}
                 >
@@ -164,7 +176,6 @@ export const MinSecPicker = observer(function MinSecPicker(props: MinSecPickerPr
                 <Text style={STYLE_OK_BUTTON_TEXT}
                       onPress={() => setShowTimeOfRounds(false)}>Tamam</Text>
               </TouchableOpacity>
-
             </View>
             :
             null

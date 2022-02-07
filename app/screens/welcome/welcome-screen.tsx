@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import {
   View,
   ViewStyle,
@@ -12,14 +12,16 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
   Screen,
-  GradientBackground, Icon,
+  GradientBackground, Icon, BoxingCounter,
 } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
-import { Countdown } from "react-native-element-timer"
 import { useKeepAwake } from "expo-keep-awake"
+import { useStores } from "../../models"
+import { defaultTrainingModelData } from "../../models/training-profile/training-profile-default"
+import { Audio } from "expo-av"
 
-const image = require("../screens/welcome/logo2.png")
+const image = require("../../../assets/images/tko-bg.png")
 
 
 const FULL: ViewStyle = { flex: 1 }
@@ -30,26 +32,19 @@ const CONTAINER: ViewStyle = {
   paddingHorizontal: spacing[4],
 }
 const INNER_VIEW1: ViewStyle = {
-  flex: 0.1
+  flex: 0.1,
 }
 const INNER_VIEW2: ViewStyle = {
   flexDirection: "row",
   justifyContent: "space-between",
-  flex: 0.2,
+  flex: 0.1,
 }
-const INNER_VIEW3: ViewStyle = {
-  flex: 0.35,
-  justifyContent: "center"
-}
-const INNER_VIEW4: ViewStyle = {
-  flex: 0.2,
-  flexDirection: "row",
-  justifyContent: "center"
-}
+
 const INNER_VIEW5: ViewStyle = {
   flex: 0.1,
   flexDirection: "row",
-  justifyContent: "flex-start" }
+  justifyContent: "space-between",
+}
 const IMAGE: ViewStyle = {
   flex: 1,
   justifyContent: "center",
@@ -65,39 +60,28 @@ const TEXT_BOXING: TextStyle = {
   fontSize: 20,
   padding: spacing[4],
 }
-const TEXT_TIME: TextStyle = {
-  color: color.palette.white,
-  fontFamily: typography.primary,
-  fontWeight: "bold",
-  textAlign: "center",
-  fontSize: 130,
-}
+
 const SETTING: ViewStyle = {
   flex: 0.10,
 }
 
-const STYLE_ICON_BUTTONS: StyleProp<ImageStyle> = {
-  height: 96,
-  width: 96,
-  marginStart: 10,
-  marginEnd: 10,
-}
 const STYLE_SETTINGS_BUTTONS: StyleProp<ImageStyle> = {
-  height: 48,
-  width: 48,
+  height: 42,
+  width: 42,
+  borderRadius: 50,
+  marginEnd: 20,
+  paddingEnd: 20,
 }
-
 const TEXT_WORK_REST_VIEW: TextStyle = {
   ...TEXT,
   ...BOLD,
   fontSize: 28,
-  paddingTop: spacing[4],
-  paddingBottom: spacing[2],
+  paddingTop: spacing[1],
 }
 const TEXT_WORK_REST: TextStyle = {
   ...TEXT,
   ...BOLD,
-  fontSize: 28,
+  fontSize: 24,
 }
 const TEXT_WORK_REST_VALUE: TextStyle = {
   ...TEXT,
@@ -105,30 +89,105 @@ const TEXT_WORK_REST_VALUE: TextStyle = {
   textAlign: "center",
 }
 
+const getSelectedProfile = (profileName: string, profileStore) => {
+  for (let i = 0; i < profileStore.profiles.length; i++) {
+    if (profileStore.profiles[i].name === profileName)
+      return profileStore.profiles[i]
+  }
+
+  return [
+    defaultTrainingModelData,
+  ]
+}
+
+const timeFormatter = (seconds: number) => {
+  const secs = seconds % 60
+  const mins = (seconds - secs) / 60
+  const strMin = String(mins).padStart(2, "0")
+  const strSec = String(secs).padStart(2, "0")
+  return strMin + ":" + strSec
+}
+
+const STYLE_COUNTER: ViewStyle = {
+  flex: 0.65,
+  flexDirection: "column",
+  justifyContent: "space-between",
+}
+
 export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> = observer(
   ({ navigation }) => {
-    const nextScreen = () => navigation.navigate("settings")
+    const countDownRef = useRef(null)
 
-    const countdownRef = useRef(null)
-    const [counterState, setCounterState] = useState("initial")
+    useEffect(() => {
+      const unsubscribe = navigation.addListener("blur", () => {
+        countDownRef.current.stopCounter()
+      })
+      return unsubscribe
+    }, [navigation])
 
-    const onPressPlayPause = () => {
-      if (counterState === "initial") {
-        countdownRef.current.start()
-        setCounterState("running")
-      } else if (counterState === "running") {
-        countdownRef.current.pause()
-        setCounterState("paused")
-      } else if (counterState === "paused") {
-        countdownRef.current.resume()
-        setCounterState("running")
-      }
+    const nextScreen = () => {
+      navigation.navigate("settings")
     }
-    useKeepAwake()
+    const { profileTrainingStore } = useStores()
 
+    async function playSound() {
+      const sound = new Audio.Sound()
+      try {
+        __DEV__ && console.log("Loading Sound")
+        await sound.loadAsync(require("../../../assets/sound/fight.mp3"))
+        __DEV__ && console.log("Playing Sound")
+        await sound
+          .playAsync()
+          .then(async playbackStatus => {
+            setTimeout(() => {
+              sound.unloadAsync()
+            }, 2500)
+          })
+      } catch (error) {
+        __DEV__ && console.log(error)
+      }
+
+    }
+
+    if (profileTrainingStore.profiles.length <= 0) {
+      profileTrainingStore.saveProfiles([defaultTrainingModelData])
+    }
+
+    const defaultProfileName = profileTrainingStore.profiles[0] ? profileTrainingStore.profiles[0].name : "default"
+    const [selectedProfileName] = useState(defaultProfileName)
+    var selectedProfile = getSelectedProfile(selectedProfileName, profileTrainingStore)
+
+    const [roundCounter, setRoundCounter] = useState(1)
+    const [bgColorGradient, setGgColorGradient] = useState([])
+
+    const shiftBackgroundColor = ((states: string) => {
+      let bgColor = []
+      switch (states) {
+        case "initial":
+          bgColor = color.colorGradient.primary
+          break
+        case "run-prepare":
+          bgColor = color.colorGradient.prepare
+          break
+        case "run-round":
+          playSound().then(() => console.log("Playing ring"))
+          bgColor = color.colorGradient.round
+          break
+        case "run-resting":
+          bgColor = color.colorGradient.resting
+          break
+        case "end":
+          bgColor = color.colorGradient.primary
+          break
+      }
+      setGgColorGradient(bgColor)
+    })
+
+
+    useKeepAwake()
     return (
       <View testID="WelcomeScreen" style={FULL}>
-        <GradientBackground colors={["#000000", "#000000"]} />
+        <GradientBackground colors={bgColorGradient} />
         <ImageBackground source={image} resizeMode="contain" style={IMAGE}>
           <Screen style={CONTAINER} preset="fixed" backgroundColor={color.transparent}>
             <View style={INNER_VIEW1}>
@@ -137,52 +196,36 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <View style={INNER_VIEW2}>
               <View style={TEXT_WORK_REST_VIEW}>
                 <Text style={TEXT_WORK_REST}>Work</Text>
-                <Text style={TEXT_WORK_REST_VALUE}>03:00</Text>
+                <Text style={TEXT_WORK_REST_VALUE}>{timeFormatter(selectedProfile.timeOfRound)}</Text>
               </View>
               <View style={TEXT_WORK_REST_VIEW}>
                 <Text style={TEXT_WORK_REST}>Round</Text>
-                <Text style={TEXT_WORK_REST_VALUE}>1/6</Text>
+                <Text
+                  style={TEXT_WORK_REST_VALUE}>{selectedProfile.rounds - roundCounter + 1}/{selectedProfile.rounds}</Text>
               </View>
               <View style={TEXT_WORK_REST_VIEW}>
                 <Text style={TEXT_WORK_REST}>Rest</Text>
-                <Text style={TEXT_WORK_REST_VALUE}>00:30</Text>
+                <Text style={TEXT_WORK_REST_VALUE}>{timeFormatter(selectedProfile.timeOfRest)}</Text>
               </View>
             </View>
-            <View style={INNER_VIEW3}>
-              <Countdown
-                ref={countdownRef}
-                textStyle={TEXT_TIME}
-                initialSeconds={180}
-                // onTimes={}
-                // onPause={}
-                // onEnd={}
-              />
-            </View>
-            <View style={INNER_VIEW4}>
-              {counterState === "initial" || counterState === "paused" ?
-                <TouchableOpacity onPress={onPressPlayPause}>
-                  <Icon icon="iconsPlayButton" style={STYLE_ICON_BUTTONS} />
-                </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={onPressPlayPause}>
-                  <Icon icon="iconsPauseButton" style={STYLE_ICON_BUTTONS} />
-                </TouchableOpacity>
-              }
-              {(counterState !== "initial") ?
-                <TouchableOpacity onPress={() => {
-                  countdownRef.current.stop()
-                  setCounterState("initial")
-                }}>
-                  <Icon icon="iconsStopButton" style={STYLE_ICON_BUTTONS} />
-                </TouchableOpacity>
-                :
-                null
-              }
-            </View>
+            <BoxingCounter
+              style={STYLE_COUNTER}
+              onRound={(round) => setRoundCounter(round)}
+              rounds={selectedProfile.rounds}
+              timeOfRound={selectedProfile.timeOfRound}
+              timeOfRest={selectedProfile.timeOfRest}
+              timeRoundWarning={selectedProfile.timeRoundWarning}
+              timeOfPrepare={selectedProfile.timeOfPrepare}
+              signalOutStates={shiftBackgroundColor}
+              ref={countDownRef}
+            />
             <View style={INNER_VIEW5}>
               <TouchableOpacity style={SETTING} onPress={nextScreen}>
                 <Icon icon="iconsSettingsButton" style={STYLE_SETTINGS_BUTTONS} />
               </TouchableOpacity>
+              {/* <TouchableOpacity style={SETTING} onPress={nextScreen}> */}
+              {/*   <Icon icon="iconAbout" style={STYLE_SETTINGS_BUTTONS} /> */}
+              {/* </TouchableOpacity> */}
             </View>
           </Screen>
         </ImageBackground>
