@@ -1,10 +1,8 @@
 {
-  "name": "boxing",
-  "displayName": "boxing",
   "expo": {
     "name": "TKO Boxing",
     "slug": "TKO_Boxing",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -16,18 +14,22 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*"
     ],
     "ios": {
       "supportsTablet": true,
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "net.upvibe.tko",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio"
         ]
       }
     },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
+    "android": {
+      "package": "net.upvibe.tko",
+      "versionCode": 3,
+      "permissions": []
     }
   }
 }

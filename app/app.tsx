@@ -28,7 +28,7 @@ import { Logs } from "expo"
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 function App() {
-  Logs.enableExpoCliLogging()
+  __DEV__ && Logs.enableExpoCliLogging()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
   const {
     initialNavigationState,
